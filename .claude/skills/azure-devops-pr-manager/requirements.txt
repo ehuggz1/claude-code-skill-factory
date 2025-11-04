@@ -1,0 +1,28 @@
+# Python Dependencies for Azure DevOps PR Manager Skill
+#
+# This skill uses only Python standard library modules.
+# No external packages are required.
+#
+# Standard library modules used:
+# - re (regular expressions)
+# - typing (type hints)
+# - datetime (timestamps and date calculations)
+# - collections (defaultdict, Counter)
+# - statistics (mean, median calculations)
+#
+# Python version: 3.7+
+
+# No external dependencies required!
+
+# Optional: For enhanced features (not required for core functionality)
+# Uncomment if needed:
+
+# For better date/time handling
+# python-dateutil==2.8.2
+
+# For YAML configuration
+# pyyaml==6.0.1
+
+# For advanced statistics
+# numpy==1.24.3
+# pandas==2.0.3
