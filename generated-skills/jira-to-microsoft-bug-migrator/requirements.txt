@@ -1,0 +1,16 @@
+# JIRA to Microsoft Bug Migrator - Python Dependencies
+
+# This skill uses only Python standard library modules.
+# No external dependencies required!
+
+# Modules used:
+# - typing (Dict, List, Any, Optional)
+# - re (regular expressions for markup conversion)
+# - os (file system operations)
+# - datetime (timestamps for migration metadata)
+# - json (parsing JIRA responses - built-in)
+
+# If you need to install Python, Claude Code includes Python 3.7+
+
+# Installation:
+# No pip install needed! This skill is ready to use.

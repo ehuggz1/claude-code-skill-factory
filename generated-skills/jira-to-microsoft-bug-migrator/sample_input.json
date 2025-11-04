@@ -1,0 +1,83 @@
+{
+  "issue_key": "ECOM-1234",
+  "user_request": "Claude, export JIRA issue ECOM-1234 to GitHub bug report format and save to migrated-bugs/",
+  "jira_response": {
+    "key": "ECOM-1234",
+    "id": "10001",
+    "self": "https://company.atlassian.net/rest/api/2/issue/10001",
+    "fields": {
+      "summary": "NullReferenceException in OrderProcessor.ProcessOrder when Items is null",
+      "description": "h2. Environment\n* Language: C#\n* Component: OrderProcessing\n* Framework: .NET 6.0\n* OS: Windows 11\n\nh2. Steps to Reproduce\n# Create an Order object with null Items property\n# Call ProcessOrder(order) method\n# Observe NullReferenceException\n\nh2. Expected Behavior\nThe method should validate the order object and handle null Items collection gracefully, either by returning an error or initializing an empty collection.\n\nh2. Actual Behavior\nThe code throws NullReferenceException when attempting to access order.Items without null checking.\n\n{code:csharp}\nSystem.NullReferenceException: Object reference not set to an instance of an object.\n   at OrderProcessor.ProcessOrder(Order order) in OrderProcessor.cs:line 45\n   at OrderService.HandleNewOrder(Order order) in OrderService.cs:line 23\n{code}\n\nh2. Root Cause\nThe ProcessOrder method accesses order.Items.Sum() without first checking if Items is null. This occurs when orders are created through the legacy API which doesn't initialize the Items collection.",
+      "issuetype": {
+        "name": "Bug"
+      },
+      "status": {
+        "name": "Open"
+      },
+      "priority": {
+        "name": "High"
+      },
+      "reporter": {
+        "name": "jdoe",
+        "emailAddress": "john.doe@company.com",
+        "displayName": "John Doe"
+      },
+      "assignee": {
+        "name": "asmith",
+        "emailAddress": "alice.smith@company.com",
+        "displayName": "Alice Smith"
+      },
+      "created": "2025-11-01T10:30:00.000+0000",
+      "updated": "2025-11-04T14:22:00.000+0000",
+      "labels": [
+        "csharp",
+        "bug",
+        "automated",
+        "production"
+      ],
+      "components": [
+        {
+          "name": "OrderProcessing"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "v2.4.0"
+        }
+      ],
+      "environment": "Windows 11, .NET 6.0, Production environment",
+      "comment": {
+        "comments": [
+          {
+            "author": {
+              "displayName": "Alice Smith"
+            },
+            "body": "Workaround: Manually check if order.Items is null before processing. We've added this check in the API layer for now.",
+            "created": "2025-11-02T09:15:00.000+0000"
+          }
+        ]
+      },
+      "issuelinks": [
+        {
+          "type": {
+            "name": "Relates"
+          },
+          "outwardIssue": {
+            "key": "ECOM-1100",
+            "fields": {
+              "summary": "Legacy API creates orders without initializing collections"
+            }
+          }
+        }
+      ],
+      "attachment": [
+        {
+          "filename": "exception-screenshot.png",
+          "content": "https://company.atlassian.net/secure/attachment/10050/exception-screenshot.png",
+          "size": 45678,
+          "mimeType": "image/png"
+        }
+      ]
+    }
+  }
+}
