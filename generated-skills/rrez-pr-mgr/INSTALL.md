@@ -1,4 +1,4 @@
-# Installation Guide: Azure DevOps PR Manager
+# Installation Guide: RREZ PR Manager
 
 ## Installation
 
@@ -7,27 +7,27 @@
 **Project-level**:
 ```bash
 mkdir -p .claude/skills
-unzip azure-devops-pr-manager.zip -d .claude/skills/
+unzip rrez-pr-mgr.zip -d .claude/skills/
 ```
 
 **User-level**:
 ```bash
 mkdir -p ~/.claude/skills
-unzip azure-devops-pr-manager.zip -d ~/.claude/skills/
+unzip rrez-pr-mgr.zip -d ~/.claude/skills/
 ```
 
 ### Claude Desktop
 
 1. Open Claude Desktop
 2. Settings → Skills → Import Skill
-3. Select `azure-devops-pr-manager.zip`
+3. Select `rrez-pr-mgr.zip`
 4. Click Import
 
 ### Claude Web
 
 1. Go to https://claude.ai
 2. Profile → Settings → Skills
-3. Upload `azure-devops-pr-manager.zip`
+3. Upload `rrez-pr-mgr.zip`
 4. Enable the skill
 
 ---

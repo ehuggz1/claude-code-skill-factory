@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "filepath": "migrated-bugs/ECOM-1234-20251104-153045-nullreferenceexception-orderprocessor.md",
+  "issue_key": "ECOM-1234",
+  "summary": "NullReferenceException in OrderProcessor.ProcessOrder when Items is null",
+  "jira_url": "https://company.atlassian.net/browse/ECOM-1234",
+  "validation": {
+    "missing_required": [],
+    "missing_recommended": [],
+    "present_fields": [
+      "Title",
+      "Description",
+      "Steps to Reproduce",
+      "Expected Behavior",
+      "Actual Behavior",
+      "Environment",
+      "OS",
+      ".NET Version",
+      "Severity",
+      "Workaround",
+      "Related Issues",
+      "Screenshots",
+      "Root Cause"
+    ],
+    "is_complete": true,
+    "completeness_score": 100.0,
+    "total_required": 9,
+    "total_recommended": 4
+  },
+  "user_message": "✓ Generated GitHub bug report: migrated-bugs/ECOM-1234-20251104-153045-nullreferenceexception-orderprocessor.md\n  Source: https://company.atlassian.net/browse/ECOM-1234\n\n✓ All required fields present\n✓ All recommended fields present\n\nReport is ready to create GitHub issue.",
+  "markdown_preview": "# [BUG] NullReferenceException in OrderProcessor.ProcessOrder when Items is null\n\n**Source**: Migrated from JIRA [ECOM-1234](https://company.atlassian.net/browse/ECOM-1234)\n\n## Description\n\nThe ProcessOrder method accesses order.Items.Sum() without first checking if Items is null...\n\n## Steps to Reproduce\n\n1. Create an Order object with null Items property\n2. Call ProcessOrder(order) method\n3. Observe NullReferenceException\n\n## Expected Behavior\n\nThe method should validate the order object and handle null Items collection gracefully...\n\n## Actual Behavior\n\nThe code throws NullReferenceException when attempting to access order.Items without null checking.\n\n```csharp\nSystem.NullReferenceException: Object reference not set to an instance of an object.\n   at OrderProcessor.ProcessOrder(Order order) in OrderProcessor.cs:line 45\n   at OrderService.HandleNewOrder(Order order) in OrderService.cs:line 23\n```\n\n## Environment\n\n- **OS**: Windows 11\n- **.NET Version**: .NET 6.0\n- **Component**: OrderProcessing\n- **Affected Version**: v2.4.0\n\n## Stack Trace / Error Output\n\n```csharp\nSystem.NullReferenceException: Object reference not set to an instance of an object.\n   at OrderProcessor.ProcessOrder(Order order) in OrderProcessor.cs:line 45\n   at OrderService.HandleNewOrder(Order order) in OrderService.cs:line 23\n```\n\n## Severity\n\n**High** - Feature unavailable or severely degraded\n\n## Workaround\n\nWorkaround: Manually check if order.Items is null before processing. We've added this check in the API layer for now.\n\n## Related Issues\n\n- **Relates**: ECOM-1100 - Legacy API creates orders without initializing collections\n\n## Screenshots / Attachments\n\n- [exception-screenshot.png](https://company.atlassian.net/secure/attachment/10050/exception-screenshot.png) (45678 bytes)\n\n## Root Cause Analysis\n\nThe ProcessOrder method accesses order.Items.Sum() without first checking if Items is null. This occurs when orders are created through the legacy API which doesn't initialize the Items collection.\n\n---\n\n**Migration Metadata**\n- **Migrated from**: JIRA ECOM-1234\n- **Original URL**: https://company.atlassian.net/browse/ECOM-1234\n- **Original Reporter**: John Doe\n- **Original Created**: 2025-11-01T10:30:00.000+0000\n- **Migration Date**: 2025-11-04 15:30:45\n- **Migrated by**: Claude (JIRA to Microsoft Bug Migrator Skill)"
+}

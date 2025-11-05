@@ -2,11 +2,14 @@
 JIRA Reader Module
 
 Retrieves JIRA issues using Atlassian MCP and extracts relevant fields.
+Downloads attachments locally for inclusion in GitHub issues.
 Claude will use this module to fetch issue data before formatting.
 """
 
 from typing import Dict, Any, Optional, List
 import re
+import os
+import requests
 
 
 class JiraReader:
@@ -109,10 +112,65 @@ class JiraReader:
                 'filename': att.get('filename', ''),
                 'url': att.get('content', ''),
                 'size': att.get('size', 0),
-                'mime_type': att.get('mimeType', '')
+                'mime_type': att.get('mimeType', ''),
+                'local_path': ''  # Will be set when downloaded
             }
             for att in attachments
         ]
+
+    def download_attachments(self, output_dir: str, auth_token: Optional[str] = None) -> List[str]:
+        """
+        Download all attachments to the specified directory.
+
+        Args:
+            output_dir: Directory to save attachments
+            auth_token: Optional authentication token for JIRA API
+
+        Returns:
+            List of local file paths for downloaded attachments
+        """
+        if not self.parsed_data.get('attachments'):
+            return []
+
+        # Ensure output directory exists
+        os.makedirs(output_dir, exist_ok=True)
+
+        downloaded_files = []
+
+        for attachment in self.parsed_data['attachments']:
+            url = attachment.get('url', '')
+            filename = attachment.get('filename', '')
+
+            if not url or not filename:
+                continue
+
+            try:
+                # Prepare headers
+                headers = {}
+                if auth_token:
+                    headers['Authorization'] = f'Bearer {auth_token}'
+
+                # Download file
+                response = requests.get(url, headers=headers, stream=True, timeout=30)
+                response.raise_for_status()
+
+                # Save to local file
+                local_path = os.path.join(output_dir, filename)
+
+                with open(local_path, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
+
+                # Update attachment info with local path
+                attachment['local_path'] = local_path
+                downloaded_files.append(local_path)
+
+            except Exception as e:
+                # Log error but continue with other attachments
+                print(f"Warning: Failed to download {filename}: {str(e)}")
+                continue
+
+        return downloaded_files
 
     def _extract_links(self, links: List[Dict]) -> List[Dict[str, str]]:
         """Extract issue links"""
