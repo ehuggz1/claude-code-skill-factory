@@ -1,4 +1,4 @@
-# Azure DevOps Git PR Manager
+# RREZ PR Manager
 
 **Comprehensive pull request management for Azure DevOps: Create, Review, Manage, and Analyze PRs via MCP integration**
 
@@ -10,14 +10,14 @@
 
 **Project-level**:
 ```bash
-mkdir -p .claude/skills/azure-devops-pr-manager
-cp -r generated-skills/azure-devops-pr-manager/* .claude/skills/azure-devops-pr-manager/
+mkdir -p .claude/skills/rrez-pr-mgr
+cp -r generated-skills/rrez-pr-mgr/* .claude/skills/rrez-pr-mgr/
 ```
 
 **User-level**:
 ```bash
-mkdir -p ~/.claude/skills/azure-devops-pr-manager
-cp -r generated-skills/azure-devops-pr-manager/* ~/.claude/skills/azure-devops-pr-manager/
+mkdir -p ~/.claude/skills/rrez-pr-mgr
+cp -r generated-skills/rrez-pr-mgr/* ~/.claude/skills/rrez-pr-mgr/
 ```
 
 ### 2. Verify Azure DevOps MCP is Configured
@@ -125,7 +125,7 @@ Repo: backend
 ## File Structure
 
 ```
-azure-devops-pr-manager/
+rrez-pr-mgr/
 ├── SKILL.md              # Claude's instructions
 ├── README.md             # This file
 ├── INSTALL.md            # Installation guide

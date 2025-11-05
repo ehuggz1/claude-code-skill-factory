@@ -1,9 +1,9 @@
 ---
-name: jira-to-microsoft-bug-migrator
+name: create-msft-bugreport
 description: Retrieves JIRA issues via Atlassian MCP and generates GitHub-compliant bug reports with validation of required and recommended fields
 ---
 
-# JIRA to Microsoft Bug Migrator
+# Create Microsoft Bug Report
 
 This skill retrieves bug information from JIRA issues and generates Microsoft GitHub-compliant bug report markdown files with comprehensive field validation and missing data tracking.
 
@@ -44,11 +44,25 @@ This skill retrieves bug information from JIRA issues and generates Microsoft Gi
 - Warning badges for critical missing data
 - Placeholder text for manual updates
 
-**File Naming:**
+**Directory Structure:**
 ```
-{JIRA-KEY}-{timestamp}-{sanitized-title}.md
-Example: PROJ-123-20251104-153045-nullreferenceexception-orderprocessor.md
+{output-dir}/
+  {JIRA-KEY}/
+    {JIRA-KEY}-{timestamp}-{sanitized-title}.md
+    attachment1.png
+    attachment2.png
+    ...
+
+Example: migrated-bugs/PROJ-123/
+  PROJ-123-20251104-153045-nullreferenceexception-orderprocessor.md
+  screenshot-error.png
+  stack-trace.txt
 ```
+
+Each JIRA issue gets its own subdirectory containing:
+- The bug report markdown file
+- All downloaded attachments from JIRA
+- Ready to upload to GitHub as a complete package
 
 ## How to Use
 
@@ -74,10 +88,10 @@ Save them to migrated-bugs/
 
 ## Scripts
 
-- **jira_reader.py**: Retrieves JIRA issues using Atlassian MCP tools
-- **microsoft_template.py**: Formats bug reports for GitHub Issues
+- **jira_reader.py**: Retrieves JIRA issues using Atlassian MCP tools and downloads attachments
+- **microsoft_template.py**: Formats bug reports for GitHub Issues with local attachment references
 - **field_validator.py**: Validates required and recommended fields
-- **report_generator.py**: Generates final markdown output
+- **report_generator.py**: Generates final markdown output with issue-specific subdirectories
 
 ## Workflow
 
@@ -87,28 +101,37 @@ When this skill is invoked, Claude will:
    - Use `mcp__atlassian__jira_get_issue` with the provided issue key
    - Extract all relevant fields from the JIRA response
    - Parse JIRA wiki markup content
+   - Identify all attachments for download
 
-2. **Validate Fields**
+2. **Download Attachments**
+   - Create issue-specific subdirectory: `{output-dir}/{JIRA-KEY}/`
+   - Download all attachments from JIRA to the subdirectory
+   - Update attachment references to point to local files
+   - Handle download errors gracefully (continues with other attachments)
+
+3. **Validate Fields**
    - Check for GitHub-required fields (Title, Description, Steps, Expected, Actual, Environment, Severity)
    - Check for recommended fields (Workaround, Related Issues, Screenshots, Root Cause)
    - Generate missing fields lists
 
-3. **Convert to GitHub Format**
+4. **Convert to GitHub Format**
    - Map JIRA fields to GitHub issue structure
    - Convert JIRA wiki markup → GitHub markdown
    - Format code blocks, tables, and lists properly
+   - Reference local attachment files (not URLs)
    - Add migration metadata
 
-4. **Generate Report**
+5. **Generate Report**
    - Create complete GitHub-compliant markdown
    - Add missing fields section with checkboxes and warnings
    - Include JIRA source link and migration timestamp
-   - Save to user-specified directory
+   - Save to issue subdirectory: `{output-dir}/{JIRA-KEY}/{JIRA-KEY}-{timestamp}-{title}.md`
 
-5. **Return Results**
-   - Confirm file location
+6. **Return Results**
+   - Confirm file location and attachments downloaded
    - Summarize missing fields that need manual update
    - Provide JIRA source link
+   - List all files in the issue directory
 
 ## Field Mapping (JIRA → GitHub)
 

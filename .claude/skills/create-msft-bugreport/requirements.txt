@@ -1,0 +1,14 @@
+# Create Microsoft Bug Report - Python Dependencies
+
+# External dependencies:
+requests>=2.28.0  # For downloading JIRA attachments
+
+# Standard library modules used:
+# - typing (Dict, List, Any, Optional)
+# - re (regular expressions for markup conversion)
+# - os (file system operations)
+# - datetime (timestamps for migration metadata)
+# - json (parsing JIRA responses - built-in)
+
+# Installation:
+# pip install requests

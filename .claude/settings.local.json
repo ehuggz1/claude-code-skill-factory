@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(rm:*)",
-      "Bash(python -m zipfile:*)"
+      "Bash(python -m zipfile:*)",
+      "Bash(pip install:*)",
+      "mcp__atlassian__getJiraIssue",
+      "Bash(python export_mm300_github.py:*)"
     ],
     "deny": [],
     "ask": []

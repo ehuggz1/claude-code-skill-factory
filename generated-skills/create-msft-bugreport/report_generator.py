@@ -13,14 +13,16 @@ from datetime import datetime
 class BugReportGenerator:
     """Generate and save GitHub bug report markdown files"""
 
-    def __init__(self, output_dir: str = "migrated-bugs"):
+    def __init__(self, output_dir: str = "migrated-bugs", create_issue_subdir: bool = True):
         """
         Initialize report generator.
 
         Args:
             output_dir: Directory to save reports (user-specified or default)
+            create_issue_subdir: If True, creates subdirectory named after JIRA issue
         """
         self.output_dir = output_dir
+        self.create_issue_subdir = create_issue_subdir
 
     def save_report(
         self,
@@ -39,14 +41,21 @@ class BugReportGenerator:
         Returns:
             Path to saved file
         """
+        # Determine output directory
+        if self.create_issue_subdir:
+            # Create subdirectory named after JIRA issue
+            issue_output_dir = os.path.join(self.output_dir, jira_issue_key)
+        else:
+            issue_output_dir = self.output_dir
+
         # Create output directory if it doesn't exist
-        self._ensure_output_dir()
+        os.makedirs(issue_output_dir, exist_ok=True)
 
         # Generate filename
         filename = self._generate_filename(jira_issue_key, issue_summary)
 
         # Full file path
-        filepath = os.path.join(self.output_dir, filename)
+        filepath = os.path.join(issue_output_dir, filename)
 
         # Write file
         with open(filepath, 'w', encoding='utf-8') as f:
@@ -54,10 +63,19 @@ class BugReportGenerator:
 
         return filepath
 
-    def _ensure_output_dir(self):
-        """Create output directory if it doesn't exist"""
-        if not os.path.exists(self.output_dir):
-            os.makedirs(self.output_dir)
+    def get_issue_output_dir(self, jira_issue_key: str) -> str:
+        """
+        Get the output directory for a specific JIRA issue.
+
+        Args:
+            jira_issue_key: JIRA issue key
+
+        Returns:
+            Directory path for the issue
+        """
+        if self.create_issue_subdir:
+            return os.path.join(self.output_dir, jira_issue_key)
+        return self.output_dir
 
     def _generate_filename(self, issue_key: str, summary: str) -> str:
         """

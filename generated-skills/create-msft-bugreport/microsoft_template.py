@@ -6,6 +6,7 @@ Formats JIRA issue data into GitHub-compliant bug report markdown.
 
 from typing import Dict, List, Any, Optional
 from datetime import datetime
+import os
 
 
 class GitHubBugTemplate:
@@ -259,7 +260,7 @@ class GitHubBugTemplate:
         return '\n'.join(sections)
 
     def _format_screenshots(self) -> str:
-        """Format screenshots section"""
+        """Format screenshots section with local file references"""
         attachments = self.jira.get('attachments', [])
 
         if not attachments:
@@ -268,14 +269,50 @@ class GitHubBugTemplate:
         sections = []
         sections.append("## Screenshots / Attachments\n")
 
+        downloaded = []
+        pending = []
+
         for att in attachments:
             filename = att.get('filename', '')
+            local_path = att.get('local_path', '')
             url = att.get('url', '')
             size = att.get('size', 0)
 
-            sections.append(f"- [{filename}]({url}) ({size} bytes)")
+            # Categorize as downloaded or pending
+            if local_path and os.path.exists(local_path):
+                downloaded.append(att)
+                sections.append(f"- ✓ **{filename}** (included in this directory, {size:,} bytes)")
+            else:
+                pending.append(att)
+                sections.append(f"- ⚠️ **{filename}** (needs manual download, {size:,} bytes)")
 
         sections.append("")
+
+        if pending:
+            sections.append("### ⚠️ Manual Download Required\n")
+            sections.append(f"**{len(pending)} attachment(s) need to be downloaded from JIRA:**\n")
+
+            jira_url = self.jira_url
+            if jira_url and jira_url != "[JIRA URL not available]":
+                sections.append(f"**Download from**: {jira_url}\n")
+
+            for att in pending:
+                filename = att.get('filename', '')
+                size = att.get('size', 0)
+                sections.append(f"{len(downloaded) + pending.index(att) + 1}. `{filename}` ({size:,} bytes)")
+
+            sections.append("\n**Instructions**:")
+            sections.append("1. Open the JIRA issue in your browser")
+            sections.append("2. Scroll to the Attachments section")
+            sections.append("3. Download each file listed above")
+            sections.append(f"4. Save to the same directory as this markdown file (issue folder: `{self.jira.get('issue_key', 'ISSUE-KEY')}/`)")
+            sections.append("5. Upload to GitHub when creating the issue")
+            sections.append("")
+
+        if downloaded:
+            sections.append(f"**Note**: {len(downloaded)} attachment(s) already downloaded and ready to upload to GitHub.")
+            sections.append("")
+
         return '\n'.join(sections)
 
     def _format_root_cause(self) -> str:

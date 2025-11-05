@@ -1,6 +1,6 @@
-# JIRA to Microsoft Bug Migrator
+# Create Microsoft Bug Report
 
-**Export JIRA issues to GitHub-compliant bug reports with field validation and missing data tracking**
+**Export JIRA issues to GitHub-compliant bug reports with local attachment downloads and field validation**
 
 ---
 
@@ -10,14 +10,25 @@
 
 **Project-level:**
 ```bash
-mkdir -p .claude/skills/jira-to-microsoft-bug-migrator
-cp -r generated-skills/jira-to-microsoft-bug-migrator/* .claude/skills/jira-to-microsoft-bug-migrator/
+mkdir -p .claude/skills/create-msft-bugreport
+cp -r generated-skills/create-msft-bugreport/* .claude/skills/create-msft-bugreport/
 ```
 
 **User-level (recommended):**
 ```bash
-mkdir -p ~/.claude/skills/jira-to-microsoft-bug-migrator
-cp -r generated-skills/jira-to-microsoft-bug-migrator/* ~/.claude/skills/jira-to-microsoft-bug-migrator/
+mkdir -p ~/.claude/skills/create-msft-bugreport
+cp -r generated-skills/create-msft-bugreport/* ~/.claude/skills/create-msft-bugreport/
+```
+
+### 1.5. Install Dependencies
+
+```bash
+pip install -r .claude/skills/create-msft-bugreport/requirements.txt
+```
+
+Or:
+```bash
+pip install requests
 ```
 
 ### 2. Verify Atlassian MCP is Configured
@@ -46,8 +57,11 @@ Save it to migrated-bugs/
 
 ### JIRA to GitHub Migration
 - **Retrieve JIRA Issues**: Fetch complete issue data via Atlassian MCP
+- **Download Attachments**: Automatically download all JIRA attachments locally
+- **Organized Output**: Create issue-specific subdirectories with markdown and attachments
 - **Convert Format**: Transform JIRA wiki markup to GitHub markdown
 - **Field Mapping**: Automatic mapping of JIRA fields to GitHub issue template
+- **Local References**: Bug report references local attachment files, ready for GitHub upload
 - **Preserve Links**: Convert JIRA attachments and issue links
 
 ### Field Validation

@@ -1,4 +1,4 @@
-# Azure DevOps Git PR Manager
+# RREZ PR Manager
 
 **Comprehensive pull request management for Azure DevOps via MCP integration**
 
@@ -679,7 +679,7 @@ Repo: backend
 ## File Structure
 
 ```
-azure-devops-pr-manager/
+rrez-pr-mgr/
 ├── SKILL.md                    # This file (skill instructions)
 ├── README.md                   # User-facing documentation
 ├── INSTALL.md                  # Installation guide
